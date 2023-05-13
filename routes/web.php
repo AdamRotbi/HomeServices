@@ -31,3 +31,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
 });
+
+// Route::get('/', [ProductController::class, 'index']);  
+// Route::get('cart', [ProductController::class, 'cart'])->name('cart');
+// Route::get('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
+// Route::patch('update-cart', [ProductController::class, 'update'])->name('update.cart');
+// Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');

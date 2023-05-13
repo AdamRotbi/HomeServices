@@ -1,6 +1,5 @@
-@extends('layouts.app')
-
-
+@extends('products.layout')
+   
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
@@ -12,8 +11,7 @@
             </div>
         </div>
     </div>
-
-
+     
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -23,10 +21,21 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Details:</strong>
-                {{ $product->detail }}
+                <strong>Description:</strong>
+                {{ $product->description }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Price:</strong>
+                {{ $product->price }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Image:</strong>
+                <img src="/images/{{ $product->image }}" width="500px">
             </div>
         </div>
     </div>
 @endsection
-<p class="text-center text-primary"><small>Tutorial by ItSolutionStuff.com</small></p>
