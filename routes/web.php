@@ -17,7 +17,10 @@ use App\Http\Controllers\ProductController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-  
+use App\Http\Controllers\ProductAjaxController;
+
+Route::resource('products-ajax-crud', ProductAjaxController::class);
+
 Route::get('/', function () {
     return view('welcome');
 });
