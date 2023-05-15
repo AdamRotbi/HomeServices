@@ -113,7 +113,7 @@ return response()->json(['success' => 'Product saved successfully.']);
     */
     public function export() 
     {
-        return Excel::download(new ProductsExport, 'users.xlsx');
+        return Excel::download(new ProductsExport, 'Products.xlsx');
     }
        
     /**
