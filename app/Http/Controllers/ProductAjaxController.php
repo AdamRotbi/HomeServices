@@ -1,8 +1,12 @@
 <?php
            
 namespace App\Http\Controllers;
-            
+
+use App\Exports\ProductsExport;
 use App\Models\Product;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
+
 use Illuminate\Http\Request;
 use DataTables;
           
@@ -53,7 +57,7 @@ class ProductAjaxController extends Controller
         ]);
         
         $input = $request->all();
-        $input['id'] = $request->id;
+        $input['id'] = $request->product_id;
         if ($image = $request->file('image')) {
         $destinationPath = 'images/';
         $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
@@ -61,13 +65,23 @@ class ProductAjaxController extends Controller
         $input['image'] = $profileImage;
 }
     
+if ($request->has('product_id')) {
+    $product = Product::find($request->input('product_id'));
+    $product->update($input);
+} else {
+    // Create a new product
+    $product = Product::create($input);
+}
+
+return response()->json(['success' => 'Product saved successfully.']);
+}
         // Store or update the product data
-        Product::updateOrCreate(
-            ['id' => $input['id']],
-           $input
-        );
-        return response()->json(['success'=>'Product saved successfully.']);
-    }
+    //     Product::updateOrCreate(
+    //         [$input['id'] = $request->product_id], // Updated line
+    //        $input
+    //     );
+    //     return response()->json(['success'=>'Product saved successfully.']);
+    // }
     /**
      * Show the form for editing the specified resource.
      *
@@ -92,5 +106,25 @@ class ProductAjaxController extends Controller
       
         return response()->json(['success'=>'Product deleted successfully.']);
     }
+
+
+     /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function export() 
+    {
+        return Excel::download(new ProductsExport, 'users.xlsx');
+    }
+       
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function import() 
+    {
+        Excel::import(new ProductsImport,request()->file('file'));
+               
+        return back();
+    }
+
 }
 ?>

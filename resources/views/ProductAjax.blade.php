@@ -15,9 +15,22 @@
 <body>
       
 <div class="container">
+    <form  action="{{ route('ProductAjaxController.import') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="file" class="form-control">
+        <br>
+        <button class="btn btn-success">Import Product Data</button>
+    </form>
+   
     <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create New Product</a>
     <table class="table table-bordered data-table">
+
+        
         <thead>
+            <th colspan="3">
+                List Of Users
+                <a class="btn btn-warning float-end" href="{{ route('ProductAjaxController.export') }}">Export Product Data</a>
+            </th>
             <tr>
                 <th>No</th>
                 <th>Name</th>
@@ -31,6 +44,15 @@
         </tbody>
     </table>
 </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
      
 <div class="modal fade" id="ajaxModel" aria-hidden="true">
     <div class="modal-dialog">
@@ -38,8 +60,9 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="modelHeading"></h4>
             </div>
+
             <div class="modal-body">
-                <form id="productForm" name="productForm" class="form-horizontal" enctype="multipart/form-data">
+                <form id="productForm" name="productForm" class="form-horizontal" enctype="multipart/form-data" >
                    <input type="hidden" name="product_id" id="product_id">
                     <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">Name</label>
@@ -64,7 +87,7 @@
                         <label class="col-sm-2 control-label">Image</label>
                         <div class="col-sm-12">
                             <strong>Image:</strong>
-                            <input type="file" name="image" class="form-control" placeholder="image">                 
+                            <input type="file" name="image" class="form-control" placeholder="image">
 
                         </div>
                     </div>
@@ -149,7 +172,7 @@
           $('#name').val(data.name);
           $('#description').val(data.description);
           $('#price').val(data.price);
-          $('#image').val(data.image);
+        //   $('#image').val(data.image);
 
       })
     });
@@ -160,27 +183,30 @@
     --------------------------------------------
     --------------------------------------------*/
     $('#saveBtn').click(function (e) {
-        e.preventDefault();
-        $(this).html('Sending..');
-      
-        $.ajax({
-          data: $('#productForm').serialize(),
-          url: "{{ route('products-ajax-crud.store') }}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-       
-              $('#productForm').trigger("reset");
-              $('#ajaxModel').modal('hide');
-              table.draw();
-           
-          },
-          error: function (data) {
-              console.log('Error:', data);
-              $('#saveBtn').html('Save Changes');
-          }
-      });
+    e.preventDefault();
+    $(this).html('Sending..');
+
+    var formData = new FormData($('#productForm')[0]);
+
+    $.ajax({
+        data: formData,
+        url: "{{ route('products-ajax-crud.store') }}",
+        type: "POST",
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            $('#productForm').trigger("reset");
+            $('#ajaxModel').modal('hide');
+            table.draw();
+        },
+        error: function (data) {
+            console.log('Error:', data);
+            $('#saveBtn').html('Save Changes');
+        }
     });
+});
+
       
     /*------------------------------------------
     --------------------------------------------

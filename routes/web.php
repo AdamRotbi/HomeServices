@@ -7,6 +7,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
   
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,8 +37,18 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', ProductController::class);
 });
 
+
+
 // Route::get('/', [ProductController::class, 'index']);  
 // Route::get('cart', [ProductController::class, 'cart'])->name('cart');
 // Route::get('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
 // Route::patch('update-cart', [ProductController::class, 'update'])->name('update.cart');
 // Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');
+
+
+ 
+Route::controller(ProductAjaxController::class)->group(function(){
+    // Route::get('users', 'index');
+    Route::get('ProductAjaxController-export', 'export')->name('ProductAjaxController.export');
+    Route::post('ProductAjaxController-import', 'import')->name('ProductAjaxController.import');
+});
