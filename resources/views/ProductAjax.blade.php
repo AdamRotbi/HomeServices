@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AdminProduct</title>
+    <title>Laravel Ajax CRUD Tutorial Example - ItSolutionStuff.com</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -13,13 +13,14 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 </head>
 <body>
+      
+<div class="container">
     <form  action="{{ route('ProductAjaxController.import') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="file" name="file" class="form-control">
         <br>
         <button class="btn btn-success">Import Product Data</button>
     </form>
-<div class="container">
    
     <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create New Product</a>
     <table class="table table-bordered data-table">
@@ -30,9 +31,6 @@
                 List Of Users
                 <a class="btn btn-warning float-end" href="{{ route('ProductAjaxController.export') }}">Export Product Data</a>
             </th>
-            
-                
-                
             <tr>
                 <th>No</th>
                 <th>Name</th>

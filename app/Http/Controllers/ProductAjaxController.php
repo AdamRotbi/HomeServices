@@ -65,23 +65,28 @@ class ProductAjaxController extends Controller
         $input['image'] = $profileImage;
 }
     
-if ($request->has('product_id')) {
-    $product = Product::find($request->input('product_id'));
-    $product->update($input);
-} else {
-    // Create a new product
-    $product = Product::create($input);
-}
-
-return response()->json(['success' => 'Product saved successfully.']);
-}
+// if ($request->has('product_id')) {
+//     // Update an existing product
+//     $product = Product::find($request->input('product_id'));
+//     if ($product) {
+//         $product->update($input);
+//     } else {
+//         // Handle the case where the product doesn't exist
+//         return response()->json(['error' => 'Product not found.'], 404);
+//     }
+// } else {
+//     // Create a new product
+//     $product = Product::create($input);
+// }
+// return response()->json(['success' => 'Product saved successfully.']);
+// }
         // Store or update the product data
-    //     Product::updateOrCreate(
-    //         [$input['id'] = $request->product_id], // Updated line
-    //        $input
-    //     );
-    //     return response()->json(['success'=>'Product saved successfully.']);
-    // }
+        Product::updateOrCreate(
+            ['id' => $request->product_id], // Updated line
+            $input
+        );
+        return response()->json(['success'=>'Product saved successfully.']);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -113,7 +118,7 @@ return response()->json(['success' => 'Product saved successfully.']);
     */
     public function export() 
     {
-        return Excel::download(new ProductsExport, 'Products.xlsx');
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
        
     /**
