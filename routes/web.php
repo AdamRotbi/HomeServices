@@ -1,12 +1,15 @@
 <?php
-  
+
 use Illuminate\Support\Facades\Route;
-  
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-  
+use App\Http\Controllers\CategoryController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +20,10 @@ use App\Http\Controllers\ProductController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-  
+use App\Http\Controllers\ProductAjaxController;
+
+Route::resource('products-ajax-crud', ProductAjaxController::class);
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -30,10 +36,26 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::get('/categories', [CategoryController::class, 'category'])->name('categories.category');
+    Route::get('/categories/create', [CategoryController::class, 'addCategory'])->name('categories.create');
+
 });
+
+
 
 // Route::get('/', [ProductController::class, 'index']);  
 // Route::get('cart', [ProductController::class, 'cart'])->name('cart');
 // Route::get('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
 // Route::patch('update-cart', [ProductController::class, 'update'])->name('update.cart');
 // Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');
+
+
+ 
+Route::controller(ProductAjaxController::class)->group(function(){
+    // Route::get('users', 'index');
+    Route::get('ProductAjaxController-export', 'export')->name('ProductAjaxController.export');
+    Route::post('ProductAjaxController-import', 'import')->name('ProductAjaxController.import');
+});
+
+Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
