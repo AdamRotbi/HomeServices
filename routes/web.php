@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
-  
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-  
+use App\Http\Controllers\CategoryController;
+
 
 
 /*
@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::get('/categories', [CategoryController::class, 'category'])->name('categories.category');
+    Route::get('/categories/create', [CategoryController::class, 'addCategory'])->name('categories.create');
 
 });
 
@@ -55,3 +57,5 @@ Route::controller(ProductAjaxController::class)->group(function(){
     Route::get('ProductAjaxController-export', 'export')->name('ProductAjaxController.export');
     Route::post('ProductAjaxController-import', 'import')->name('ProductAjaxController.import');
 });
+
+Route::get('generate-pdf', [PDFController::class, 'generatePDF']);

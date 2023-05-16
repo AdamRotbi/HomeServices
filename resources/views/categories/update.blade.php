@@ -7,7 +7,7 @@
             <!-- / Menu -->
 
             <!-- Layout container -->
-            {{-- <div class="layout-page"> --}}
+            <div class="layout-page">
                 <!-- Navbar -->
 
 
@@ -24,48 +24,47 @@
                                 <i class="bx bx-menu bx-sm"></i>
                             </a>
                             <span class="text-muted fw-light">Categories /</span>
-                            Create Category
+                            Update Category
                         </h4>
 
                         <div class="row">
-                            <form class="col-md-12" method="POST" action="{{ route('categories.addCategory') }}"
-                                enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('dashboard-admin-editCategory', $category->id) }}"
+                                enctype="multipart/form-data" class="col-md-12">
                                 @csrf
                                 <div class="card mb-4">
-                                    <h5 class="card-header">Create Category</h5>
+                                    <h5 class="card-header">Update Category</h5>
                                     <!-- Account -->
                                     <div class="card-body">
                                         <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                            <img src="{{ asset('img/image-placeholder.jpg') }}" alt="user-avatar"
-                                                class="d-block rounded" height="100" id="categoryUploadedImageCreate"
-                                                width="130" />
+                                            <img src="{{ asset('storage/images/' . $category->image) }}"
+                                                alt="Category Image" class="d-block rounded" height="100" width="130"
+                                                id="categoryUploadedImageUpdate" />
                                             <div class="button-wrapper">
-                                                <label for="categoryImageUploadCreate" class="btn btn-primary me-2 mb-4"
+                                                <label for="categoryImageUploadUpdate" class="btn btn-primary me-2 mb-4"
                                                     tabindex="0">
                                                     <span class="d-none d-sm-block">Upload category miniature</span>
                                                     <i class="bx bx-upload d-block d-sm-none"></i>
-                                                    <input type="file" class="account-file-input"
-                                                        id="categoryImageUploadCreate" name="image" hidden />
+                                                    <input type="file" id="categoryImageUploadUpdate"
+                                                        class="account-file-input" hidden name="image" />
                                                 </label>
                                                 <button type="reset"
                                                     class="btn btn-outline-secondary account-image-reset mb-4">
                                                     <i class="bx bx-reset d-block d-sm-none"></i>
                                                     <span class="d-none d-sm-block">Reset</span>
                                                 </button>
-                                                <p class="text-muted mb-0">Allowed JPG, JPEG or PNG</p>
+                                                <p class="text-muted mb-0">Allowed JPG, GIF, JPEG or PNG</p>
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-0" />
                                     <div class="card-body">
-                                        <div id="formAccountSettings">
+                                        <form id="formAccountSettings" method="POST" onsubmit="return false">
                                             <div class="row">
                                                 <div class="mb-3 col-md-12">
                                                     <label for="category_name" class="form-label">Category
                                                         Name</label>
                                                     <input class="form-control" type="text" id="category_name"
-                                                        name="name" placeholder="Ex: Shoes" value="{{ old('name') }}"
-                                                        autofocus />
+                                                        name="name" value="{{ $category->name }}" />
                                                 </div>
                                                 @if ($errors->any())
                                                     <div class="alert alert-danger">
@@ -78,9 +77,9 @@
                                                 @endif
                                             </div>
                                             <div class="mt-2">
-                                                <button type="submit" class="btn btn-primary me-2">Create</button>
+                                                <button type="submit" class="btn btn-primary me-2">Update</button>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </form>

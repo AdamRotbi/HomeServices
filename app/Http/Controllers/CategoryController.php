@@ -34,13 +34,13 @@ class CategoryController extends Controller
             'image' => $filename,
         ]);
 
-        return redirect()->route('categories-show')->with("category-create-success", "The Category " . strtolower($category['name']) . " is created successfully");
+        return redirect()->route('categories.show')->with("category-create-success", "The Category " . strtolower($category['name']) . " is created successfully");
     }
 
     public function updateCategory($id)
     {
         $category = Category::findOrFail($id);
-        return view('pages.dashboards.admin.categories.update', compact('category'));
+        return view('categories.update', compact('category'));
     }
 
     public function editCategory(Request $request, $id)
@@ -65,7 +65,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect()->route('dashboard-admin-categories-show')->with("category-update-success", "Category updated successfully");
+        return redirect()->route('categories.show')->with("category-update-success", "Category updated successfully");
     }
 
     public function deleteCategory($id)
@@ -79,6 +79,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('dashboard-admin-categories-show')->with('category-delete-success', "The Category " . strtolower($categoryName) . " is deleted successfully");
+        return redirect()->route('categories.show')->with('category-delete-success', "The Category " . strtolower($categoryName) . " is deleted successfully");
     }
 }
