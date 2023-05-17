@@ -34,6 +34,7 @@
             <tr>
                 <th>No</th>
                 <th>Name</th>
+                <th>Categorie</th>
                 <th>Description</th>
                 <th>Price</th>
                 <th>Image</th>
@@ -63,11 +64,29 @@
 
             <div class="modal-body">
                 <form id="productForm" name="productForm" class="form-horizontal" enctype="multipart/form-data" >
+                    <?php
+                        use App\Models\Category;
+                        
+                        $categories=Category::get();
+                       
+                    ?>
                    <input type="hidden" name="product_id" id="product_id">
                     <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-12">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-12">
+                            {{-- <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required=""> --}}
+                      
+                            <select name="category">
+                                @foreach($categories as $cat)
+                        <option  value="{{$cat->id}}">{{$cat->name}}</option>
+                    @endforeach   
+                    </select>
                         </div>
                     </div>
        

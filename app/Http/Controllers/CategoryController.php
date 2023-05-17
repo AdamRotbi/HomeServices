@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function category()
+    public function index()
     {
-        $categories = Category::all();
-        return view('categories.show', compact('categories'));
+        $categories = Category::latest()->paginate(5);
+        
+        return view('categories.index',compact('categories'))
+                    ->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+    public function show(Category $category): View
+    {
+        return view('categories.show',compact('categories'));
     }
 
     public function createCategory()
@@ -24,61 +31,67 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name',
             'image' => 'required|image|mimes:jpeg,png,jpg'
         ]);
+        $input = $request->all();
 
-        $image = $request->file('image');
-        $filename = time() . '_' . rand(100000, 999999) . '.' . $image->getClientOriginalExtension();
-        $path = $image->storeAs('public/images', $filename);
-
-        $category = Category::create([
-            'name' => $request->input('name'),
-            'image' => $filename,
-        ]);
-
-        return redirect()->route('categories.show')->with("category-create-success", "The Category " . strtolower($category['name']) . " is created successfully");
-    }
-
-    public function updateCategory($id)
-    {
-        $category = Category::findOrFail($id);
-        return view('categories.update', compact('category'));
-    }
-
-    public function editCategory(Request $request, $id)
-    {
-        $category = Category::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|unique:categories,name,' . $category->id,
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
-        $category->name = $request->input('name');
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . rand(100000, 999999) . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('public/images', $filename);
-
-            Storage::delete('public/images/' . $category->image);
-            $category->image = $filename;
+        if ($image = $request->file('image')) {
+            $destinationPath = 'cimages/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = "$profileImage";
         }
 
-        $category->save();
 
-        return redirect()->route('categories.show')->with("category-update-success", "Category updated successfully");
+        $category = Category::create($input);
+        
+
+        return redirect()->route('categories.index')->with("category-create-success", "The Category " . strtolower($category['name']) . " is created successfully");
     }
 
-    public function deleteCategory($id)
+    public function editCategory(Category $category): View
     {
-        $category = Category::findOrFail($id);
-        $categoryName = $category->name;
-
-        if ($category->image) {
-            Storage::delete('public/images/' . $category->image);
-        }
-
-        $category->delete();
-
-        return redirect()->route('categories.show')->with('category-delete-success', "The Category " . strtolower($categoryName) . " is deleted successfully");
+        return view('categories.edit',compact('categories'));
     }
+
+
+ 
+
+    /**
+ * Update the specified resource in storage.
+ */
+public function update(Request $request, Category $category): RedirectResponse
+{
+    $request->validate([
+        'name' => 'required',
+        
+    ]);
+
+    $input = $request->all();
+
+    if ($image = $request->file('image')) {
+        $destinationPath = 'cimages/';
+        $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+        $image->move($destinationPath, $profileImage);
+        $input['image'] = "$profileImage";
+    }else{
+        unset($input['image']);
+    }
+        
+    $category->update($input);
+  
+    return redirect()->route('categories.index')
+                    ->with('success','Product updated successfully');
 }
+
+public function destroy(Category $category): RedirectResponse
+{
+    $category->delete();
+     
+    return redirect()->route('categories.index')
+                    ->with('success','Product deleted successfully');
+}
+   
+}
+
+
+
+
