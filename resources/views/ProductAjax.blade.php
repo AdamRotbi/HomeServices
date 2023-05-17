@@ -70,7 +70,7 @@
                         $categories=Category::get();
                        
                     ?>
-                   <input type="hidden" name="product_id" id="product_id">
+                   <input type="hidden" name="id" id="id">
                     <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-12">
@@ -78,15 +78,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="category" class="col-sm-2 control-label">Category</label>
+                        <label for="category_id" class="col-sm-2 control-label">Category</label>
                         <div class="col-sm-12">
-                            {{-- <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required=""> --}}
                       
-                            <select name="category">
+                            <select name="category_id" id="category_id" class="form-control" required>
                                 @foreach($categories as $cat)
-                        <option  value="{{$cat->id}}">{{$cat->name}}</option>
-                    @endforeach   
-                    </select>
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
        
@@ -150,8 +149,10 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
+            {data: 'category_id', name: 'category_id'},
             {data: 'description', name: 'description'},
             {data: 'price', name: 'price'},
+
             {
             data: 'image',
             name: 'image',
@@ -170,7 +171,7 @@
     --------------------------------------------*/
     $('#createNewProduct').click(function () {
         $('#saveBtn').val("create-product");
-        $('#product_id').val('');
+        $('#id').val('');
         $('#productForm').trigger("reset");
         $('#modelHeading').html("Create New Product");
         $('#ajaxModel').modal('show');
@@ -182,12 +183,12 @@
     --------------------------------------------
     --------------------------------------------*/
     $('body').on('click', '.editProduct', function () {
-      var product_id = $(this).data('id');
-      $.get("{{ route('products-ajax-crud.index') }}" +'/' + product_id +'/edit', function (data) {
+      var id = $(this).data('id');
+      $.get("{{ route('products-ajax-crud.index') }}" +'/' + id +'/edit', function (data) {
           $('#modelHeading').html("Edit Product");
           $('#saveBtn').val("edit-user");
           $('#ajaxModel').modal('show');
-          $('#product_id').val(data.id);
+          $('#id').val(data.id);
           $('#name').val(data.name);
           $('#description').val(data.description);
           $('#price').val(data.price);
@@ -234,12 +235,12 @@
     --------------------------------------------*/
     $('body').on('click', '.deleteProduct', function () {
      
-        var product_id = $(this).data("id");
+        var id = $(this).data("id");
         confirm("Are You sure want to delete !");
         
         $.ajax({
             type: "DELETE",
-            url: "{{ route('products-ajax-crud.store') }}"+'/'+product_id,
+            url: "{{ route('products-ajax-crud.store') }}"+'/'+id,
             success: function (data) {
                 table.draw();
             },

@@ -53,11 +53,12 @@ class ProductAjaxController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price'=>'required',
+            'category_id'=>'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         
         $input = $request->all();
-        $input['id'] = $request->product_id;
+        $input['id'] = $request->id;
         if ($image = $request->file('image')) {
         $destinationPath = 'images/';
         $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
@@ -82,7 +83,7 @@ class ProductAjaxController extends Controller
 // }
         // Store or update the product data
         Product::updateOrCreate(
-            ['id' => $request->product_id], // Updated line
+            ['id' => $request->id], // Updated line
             $input
         );
         return response()->json(['success'=>'Product saved successfully.']);
