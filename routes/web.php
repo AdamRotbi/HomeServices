@@ -36,10 +36,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::get('/categories', [CategoryController::class, 'category'])->name('categories.category');
-    Route::get('/categories/create', [CategoryController::class, 'addCategory'])->name('categories.create');
-
+    // Route::resource('categories', CategoryController::class);
+   
+    Route::get('/categories/show', [CategoryController::class,'show'])->name('categories.show');
+    Route::get('/categories/create', [CategoryController::class, 'createCategory'])->name('categories.create');
+    Route::post('/categories/add',[CategoryController::class, 'addCategory'])->name('categories.add');
+    Route::get('/categories/index',[CategoryController::class, 'index'])->name('categories.index');
+    Route::delete('/categories/destroy',[CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::put('/categories/edit',[CategoryController::class, 'edit'])->name('categories.edit');
 });
 
 
