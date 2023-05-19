@@ -10,7 +10,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::latest()->paginate(5);
-        
+
         return view('categories.index',compact('categories'))
                     ->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -42,7 +42,7 @@ class CategoryController extends Controller
 
 
         $category = Category::create($input);
-        
+
 
         return redirect()->route('categories.index')->with("category-create-success", "The Category " . strtolower($category['name']) . " is created successfully");
     }
@@ -53,7 +53,7 @@ class CategoryController extends Controller
     }
 
 
- 
+
 
     /**
  * Update the specified resource in storage.
@@ -62,7 +62,7 @@ public function update(Request $request, Category $category): RedirectResponse
 {
     $request->validate([
         'name' => 'required',
-        
+
     ]);
 
     $input = $request->all();
@@ -75,9 +75,9 @@ public function update(Request $request, Category $category): RedirectResponse
     }else{
         unset($input['image']);
     }
-        
+
     $category->update($input);
-  
+
     return redirect()->route('categories.index')
                     ->with('success','Product updated successfully');
 }
@@ -85,11 +85,11 @@ public function update(Request $request, Category $category): RedirectResponse
 public function destroy(Category $category): RedirectResponse
 {
     $category->delete();
-     
+
     return redirect()->route('categories.index')
                     ->with('success','Product deleted successfully');
 }
-   
+
 }
 
 

@@ -15,6 +15,8 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+
+                    <a href="{{ route('send-mail') }}" class="btn btn-primary">Send Mail</a>
                 </div>
             </div>
         </div>
